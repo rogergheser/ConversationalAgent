@@ -2,7 +2,6 @@ import torch
 import os
 import functools
 
-
 from .logging_utils import ColorFormatter
 from .class_utils import ConversationHistory
 from typing import Any
@@ -63,3 +62,8 @@ def log_call(logger: Any):
             return func(*args, **kwargs)
         return wrapper
     return decorator
+
+
+# ==============================================================================================================
+# Support Classes
+# ==============================================================================================================

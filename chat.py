@@ -3,12 +3,11 @@ import logging
 import os
 
 from components import (
-    PreNLU,
     NLU,
     DM,
-    NLG
+    NLG,
+    Calendar
 )
-
 from components.stateTracker import *
 from utils import *
 
@@ -26,6 +25,7 @@ class Chat():
         self.nlg_cfg = nlg_cfg
 
         self.calendar_st = calendar_st
+        self.calendar = Calendar.from_config(cfg)
         self.appointment_st = AppointmentST()
         self.cancel_appointment_st = CancelAppointmentST()
         self.repeating_appointment_st = RepeatingAppointmentST()
@@ -33,12 +33,19 @@ class Chat():
         self.logger = logging.getLogger('Chat')
         logger_cfg(self.logger, debug_color="red", info_color="white")
 
-
         self.history = ConversationHistory()
         self.welcome_msg = cfg['CHAT']['welcome_msg']
         self.nlu = NLU(pre_nlu_cfg, nlu_cfg, self.history, self.logger)
         self.nlg = NLG(nlg_cfg, self.history, self.logger)
         self.dm = DM(dm_cfg, self.history, self.logger)
+
+        self.dm.update_possible_actions({
+            'create_repeating_appointment': self.calendar.create_repeating_appointment,
+            'set_appointment': self.calendar.set_appointment,
+            'cancel_appointment': self.calendar.cancel_appointment,
+            'list_appointments': self.calendar.list_appointments,
+            'list_available_slots' : self.calendar.list_available_slots
+        })
 
         if os.environ['USER'] == 'amir.gheser':
             self.model, self.tokenizer = load_model(nlu_cfg['model_name'], parallel=False, device='cuda', dtype='b16')
@@ -55,8 +62,8 @@ class Chat():
             state_tracker,
             config
         )
+
     def process_intent(self, meaning_representation):
-        # TODO Process meaning representation based on intent
         match meaning_representation['intent']:
             case 'set_appointment':
                 self.appointment_st.update(meaning_representation)
@@ -65,8 +72,11 @@ class Chat():
                 self.repeating_appointment_st.update(meaning_representation)
                 return self.dm(self.repeating_appointment_st)
             case 'cancel_appointment':
-                # TODO Implement cancel appointment
-                raise NotImplementedError
+                self.cancel_appointment_st.update(meaning_representation)
+                return self.dm(self.cancel_appointment_st)
+            case 'list_appointments':
+                self.calendar_st.update(meaning_representation)
+                return self.dm(self.calendar_st)
             case _:
                 self.logger.error(f'Unknown intent: {meaning_representation["intent"]}')
                 raise ValueError(f'Unknown intent: {meaning_representation["intent"]}')

@@ -52,13 +52,13 @@ class DM:
         # Define a format for asking info
         self.logger.debug(raw_action)
         try:
-            action, argument = extract_action_and_arguments(raw_action)
+            action, arguments = extract_action_and_arguments(raw_action)
         except:
             self.logger.debug('\033[91m' + 'Error in parsing the action. Please try again.\n\n'
                          + raw_action)
             return
-        
-        return action, argument
+        self.logger.info(str(action) + ' ' + ', '.join(arguments))
+        return action, arguments
 
     def nba_handler(self, action, argument)->str:
         match action:

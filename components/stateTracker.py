@@ -1,7 +1,66 @@
 import logging
 
-from typing import Optional, Union
+from typing import Optional, Union, Any
 from abc import ABC, abstractmethod
+
+
+class Event():
+    # TODO [FINISH]
+    def __init__(self, cfg: Any, appointmentST):
+        fields = appointmentST.appointment
+        event = {
+        'summary': fields['appointment_name'],
+        'location': fields['location'],
+        'description': fields['notes'],
+        'start': {
+            'dateTime': '2024-01-01T10:00:00-05:00',  # Example: January 1, 2024, at 10:00 AM EST
+            'timeZone': cfg['timeZone'],
+        },
+        'end': {
+            'dateTime': '2024-01-01T11:00:00-05:00',  # Ends at 11:00 AM EST
+            'timeZone': cfg['timeZone'],
+        },
+        'attendees': [
+            {'email': attendee} for attendee in fields['invitees']
+        ],
+        'reminders': {
+            'useDefault': False,
+            'overrides': [
+                {'method': 'email', 'minutes': 24 * 60},  # 24 hours before
+                {'method': 'popup', 'minutes': 10},  # 10 minutes before
+            ],
+        },
+    }
+        self.event = event
+        self.cfg = cfg
+    
+    @staticmethod
+    def create(cfg: Any, appointmentST):
+        fields = appointmentST.appointment
+        event = {
+        'summary': fields['appointment_name'],
+        'location': fields['location'],
+        'description': fields['notes'],
+        'start': {
+            'dateTime': '2024-01-01T10:00:00-05:00',  # Example: January 1, 2024, at 10:00 AM EST
+            'timeZone': cfg['timeZone'],
+        },
+        'end': {
+            'dateTime': '2024-01-01T11:00:00-05:00',  # Ends at 11:00 AM EST
+            'timeZone': cfg['timeZone'],
+        },
+        'attendees': [
+            {'email': attendee} for attendee in fields['invitees']
+        ],
+        'reminders': {
+            'useDefault': False,
+            'overrides': [
+                {'method': 'email', 'minutes': 24 * 60},  # 24 hours before
+                {'method': 'popup', 'minutes': 10},  # 10 minutes before
+                ],
+            },
+        }
+        return event
 
 class DialogueST(ABC):
     def __init__(self):
@@ -80,6 +139,9 @@ class BurgerST(DialogueST):
       
 class AppointmentST(DialogueST):
     def __init__(self):
+        """
+        This is a set only AppointmentST.
+        """
         fields = [
             "appointment_name",
             "location",
@@ -114,7 +176,7 @@ class AppointmentST(DialogueST):
         return ', '.join([f'{key}: {value}' for key, value in self.appointment.items()])
 
     def to_dict(self):
-        return {"intent": "set_appointment", # Todo keep set/modify/cancel together?
+        return {"intent": "set_appointment",
                 "slots" : self.appointment}
 
     def is_valid(self):
@@ -123,8 +185,14 @@ class AppointmentST(DialogueST):
                 return False
         return True
     
+    def createEvent(self)->Event:
+        return Event.create(self.appointment)
+    
 
 class CancelAppointmentST(DialogueST):
+    """
+    This is a cancel only AppointmentST.
+    """
     def __init__(self):
         fields = [
             "appointment_name",
@@ -200,14 +268,14 @@ class CalendarST(DialogueST):
             logging.warning('Appointment is not an appointment or repeating appointment.')
             raise ValueError('Appointment is not an appointment or repeating appointment.')
         
-    def expand_repeating_appointments(self):
-        # Todo implement this
-        raise NotImplementedError
-
     def __str__(self):
         # TODO think this through
         raise NotImplementedError
     
+    def expand_repeating_appointments(self):
+        # Todo implement this
+        raise NotImplementedError
+
     def to_dict(self):
         # TODO think this through
         raise NotImplementedError

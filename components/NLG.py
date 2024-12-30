@@ -11,23 +11,26 @@ from utils import (
 )
 
 class NLG:
-    def __init__(self, nlg_cfg: dict, history: ConversationHistory, logger: Optional[Any]=None):
+    def __init__(self, 
+                 nlg_cfg: dict, 
+                 history: ConversationHistory, 
+                 cfg: Any,
+                 logger: Optional[Any] = None):
         self.nlg_cfg = nlg_cfg
         self.history = history
+        self.cfg = cfg
         self.logger = logger if logger else logging.getLogger('NLG')
         if os.environ['USER'] == 'amir.gheser':
             self.model, self.tokenizer = load_model(nlg_cfg['model_name'], parallel=False, device='cuda', dtype='b16')
 
     @classmethod
     def from_cfg(cls, cfg, history):
-        # get logger name from cfg
-        # TODO: Implement this method
-        raise NotImplementedError
+        return cls(cfg['NLG'], history, cfg, cfg['logger'])
 
     def __call__(self, nba: str):
         return self.lexicalise(nba)
 
-    @log_call(logger=logging.getLogger('NLG'))
+    @log_call(logger=logging.getLogger('chat_logger'))
     def lexicalise(self, action):
         self.logger.debug('lexicalise: ' + action)
         lexicalised_text = self.query_model(self.nlg_cfg['model_name'], self.nlg_cfg['system_prompt_file'], input_text=action)
