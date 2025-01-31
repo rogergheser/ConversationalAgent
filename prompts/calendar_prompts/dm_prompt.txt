@@ -12,9 +12,10 @@ Always provide the arguments in the correct syntax.
 Only return actions from this list!
 Do not use any if-statements, only answer with valid actions
 
-- list_appointments(from_date, to_date): list all appointments in the specified date range
-- list_available_slots(from_date, to_date, length): list all available slots
-- confirmation(event): generate an appropriate confirmation request message for the event to be confirmed
-- confirmation(event_list): generate an appropriate confirmation request message for the event list to be confirmed
-- remove(event): generate confirmation message for the event to be removed
-- request_info(slot) : request specific slots for an event the user is trying to set
+Possible intents:
+- book_apartments
+- list_apartments
+- request_explanation
+- request_advice
+- contact_operator
+- give_feedback

@@ -136,7 +136,41 @@ class BurgerST(DialogueST):
                 return False
         return True
     
-      
+class FallbackST(DialogueST):
+    def __init__(self):
+        fields = [
+
+        ]
+        self.fallback = {field: None for field in fields}
+
+    def update(self, parsed_input: dict):
+        if 'intent' in parsed_input:
+            if 'fallback' not in parsed_input['intent']:
+                logging.warning('Intent is not burger_ordering.')
+                return
+        if 'slots' not in parsed_input:
+            logging.warning('No slots found in parsed input.')
+            return
+
+        parsed_input = parsed_input['slots']
+        for field in parsed_input:
+            if parsed_input[field] == 'null':
+                continue
+            if field in self.fallback:
+                self.fallback[field] = parsed_input[field]
+            else:
+                logging.warning(f'Field {field} not found in order fields.')
+
+    def __str__(self):
+        return ', '.join([f'{key}: {value}' for key, value in self.fallback.items()])
+    
+    def to_dict(self):
+        return {"intent": "fallback",
+                "slots" : self.fallback}
+    
+    def is_valid(self):
+        return True
+    
 class AppointmentST(DialogueST):
     def __init__(self):
         """

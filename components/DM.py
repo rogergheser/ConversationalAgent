@@ -8,6 +8,7 @@ from utils import (
     extract_action_and_arguments,
     generate,
     load_model,
+    handle_call
 )
 from typing import Any, Optional
 
@@ -33,8 +34,13 @@ class DM:
 
     def __call__(self, state_tracker: DialogueST):
         nba, argument = self.get_nba(state_tracker)
-        
-        return self.nba_handler(nba, argument)
+        try:
+            ret_val = self.nba_handler(nba, argument)
+        except ValueError as e:
+            self.logger.error("Caught error in DM while handling {} output.".format(state_tracker.__class__))
+            self.logger.error(e)
+            exit(0)
+        return ret_val
 
     def get_nba(self, state_tracker: DialogueST):
         """
@@ -50,36 +56,37 @@ class DM:
         raw_action = self.query_model(self.dm_cfg['model_name'], self.dm_cfg['system_prompt_file'], str(meaning_representation))
         # action = parse_json(raw_action) # TODO what to parse? Do we need to parse?
         # Define a format for asking info
-        self.logger.debug(raw_action)
+        self.logger.debug("Raw action: " + raw_action)
         try:
             action, arguments = extract_action_and_arguments(raw_action)
         except:
             self.logger.debug('\033[91m' + 'Error in parsing the action. Please try again.\n\n'
                          + raw_action)
             return
-        self.logger.info(str(action) + ' ' + ', '.join(arguments))
+        self.logger.info(str(action) + ' [' + ', '.join(arguments) + ']')
         return action, arguments
 
-    def nba_handler(self, action, argument)->str:
+    # TODO: Rewrite this function, it's a terrible design
+    def nba_handler(self, action, args, kwargs=None)->str:
         match action:
             case 'ask_info':
-                return f'ask_info({argument})'
+                return f'ask_info({(", ").join(args)})'
             case 'request_info':
-                return f'ask_info({argument})'
+                return f'ask_info({(", ").join(args)})'
             case 'confirm_order':
-                fun, args, kwargs = self.special_actions['confirm_order']
-                return fun(*args, **kwargs)
+                fun = self.special_actions['confirm_order']
+                return handle_call(fun, args, kwargs)
             case 'confirmation':
-                fun, args, kwargs = self.special_actions['confirm_order']
-                return fun(*args, **kwargs)
+                fun = self.special_actions['confirm_order']
+                return handle_call(fun, args, kwargs)
             case _:
                 if action in self.special_actions:
-                    fun, args, kwargs = self.special_actions[action]
-                    return fun(*args, **kwargs)
+                    fun = self.special_actions[action]
+                    return handle_call(fun, args, kwargs)
                 else:
                     raise ValueError(f'Unknown action: {action}')
             
-    def query_model(self, model_name, system, input_text=False, max_seq_len=128):
+    def query_model(self, model_name, system, input_text=None, max_seq_len=128):
         system_prompt = open(system, 'r').read()
         user_env = os.getenv('USER')
         if user_env == 'amir.gheser':

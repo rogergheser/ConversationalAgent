@@ -44,6 +44,21 @@ def generate(
         output[0][len(inputs.input_ids[0]) :], skip_special_tokens=True
     )
 
+def handle_call(fun, args, kwargs):
+        if args == [''] or args == []:
+            args = None
+        try:
+            if args is None and kwargs is None:
+                return fun()
+            elif args is None:
+                return fun(**kwargs)
+            elif kwargs is None:
+                return fun(*args)
+            else:
+                return fun(*args, **kwargs)
+        except Exception as e:
+            raise str(e)
+
 # ==============================================================================================================
 # Function decorators 
 # ==============================================================================================================

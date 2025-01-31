@@ -35,7 +35,7 @@ class NLG:
         self.logger.debug('lexicalise: ' + action)
         lexicalised_text = self.query_model(self.nlg_cfg['model_name'], self.nlg_cfg['system_prompt_file'], input_text=action)
 
-        self.history.add(lexicalised_text, 'system', action)
+        # self.history.add(lexicalised_text, 'system', action)
 
         return lexicalised_text
     

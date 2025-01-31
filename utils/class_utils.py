@@ -9,6 +9,20 @@ class ConversationHistory():
         self.actions = []
         self.roles = []
 
+    def update_history_decorator(func):
+        @functools.wraps(func)
+        def wrapper(self, *args, **kwargs):
+            result = func(self, *args, **kwargs)
+            path = os.path.join('history.log')
+            with open(path, 'w+') as f:
+                f.write(self.action_history_str() + '\n')
+                f.write("-"*50)
+                f.write('\n')
+                f.write('\n'.join(self.msg_list))
+            return result
+        return wrapper
+
+    @update_history_decorator
     def add(self, msg, role, action):
         self.roles.append(role)
         self.msg_list.append(msg)

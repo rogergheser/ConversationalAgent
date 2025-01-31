@@ -1,21 +1,21 @@
 CHAT:
-  welcome_msg: I am your calendar manager assistant, what can I help you with?
+  welcome_msg: I am your apartment assistant, how can I help you?
+  fallback_msg: The request is beyond my scope. I must explain that the system is developed only for assistance with booking an apartment or assistance with said apartment. I MUST NOT add any other kind of explanation.
 PreNLU:
-  system_prompt_file: prompts/pre_nlu_prompt.txt
+  system_prompt_file: prompts/apartment_manager/pre_nlu_new_prompt.txt
   model_name: llama3
 NLU:
-  system_prompt_file: prompts/nlu_prompt.txt
+  system_prompt_file: prompts/apartment_manager/nlu_prompt.txt
   model_name: llama3
 DM:
-  system_prompt_file: prompts/dm_prompt.txt
+  system_prompt_file: prompts/apartment_manager/dm_prompt.txt
   model_name: llama3
 NLG:
-  system_prompt_file: prompts/nlg_prompt.txt
+  system_prompt_file: prompts/apartment_manager/nlg_prompt.txt
   model_name: llama3
-
-Calendar:
-  credentials_file: credentials.json
-  token_file: token.json
-  scopes: 'https://www.googleapis.com/auth/calendar'
-  calendar_id: edb410e50e7285f940b642e3251360f3936a76a408e38c06eb1ea8a96d1dd3b0@group.calendar.google.com
+# Calendar:
+#   credentials_file: credentials.json
+#   token_file: token.json
+#   scopes: 'https://www.googleapis.com/auth/calendar'
+#   calendar_id: edb410e50e7285f940b642e3251360f3936a76a408e38c06eb1ea8a96d1dd3b0@group.calendar.google.com
 logger: chat_logger

@@ -20,16 +20,16 @@ class PreNLU():
             self.model, self.tokenizer = load_model(cfg['model_name'], parallel=False, device='cuda', dtype='b16')
 
     def __call__(self, prompt: str):
-        intent_list = self.query_model(self.cfg['model_name'], self.cfg['system_prompt_file'], prompt)
-        intent_list = re.search(r"\[.*?\]", intent_list).group(0)
+        chunk_list = self.query_model(self.cfg['model_name'], self.cfg['system_prompt_file'], prompt)
         try:
-            parsed_list = eval(intent_list)
+            chunk_list = json.loads(chunk_list)
+            chunk_list = [val["chunk"] for val in chunk_list]
         except:
-            logger.debug('\033[91m' + 'Error in parsing the intent list. Please try again.\n\n'
-                         + intent_list)
+            logger.debug('\033[91m' + 'Error in parsing the intent list. Please try again.\n\t'
+                         + "\n\t".join(chunk_list))
             raise ValueError('Error in parsing the intent list. Please try again.')
 
-        return parsed_list
+        return chunk_list
 
     def query_model(self, model_name: str, system: str, input_text: Union[str, bool]=False, max_seq_len: int=128):
         system_prompt = open(system, 'r').read()
@@ -38,7 +38,8 @@ class PreNLU():
             hist = self.history.to_msg_history()
             hist = hist[-5:] if len(hist > 5) else hist
             history = "\n".join([f"{k['role']}: {k['content']}"  for k in hist])
-            input = system_prompt + '\n' + history + '\n' + input_text
+            # input = system_prompt + '\n' + history + '\n' + input_text
+            input = system_prompt + '\nUser:\n' + input_text
 
             input = self.tokenizer(input, return_tensors="pt").to(self.model.device)
             response = generate(self.model, input, self.tokenizer, max_new_tokens=max_seq_len)
@@ -49,7 +50,7 @@ class PreNLU():
             messages = [{
                             'role':'system',
                             'content': system_prompt
-                            }] + self.history.to_msg_history()
+                            }]
                         # + [{
                         #     'role':'system',
                         #     'content': system_prompt
@@ -109,10 +110,12 @@ class NLU():
 
         if len(chunks) == 1:
             return self.get_meaning_representation(chunks[0])
+        elif chunks[0] == chunks[1]:
+            return self.get_meaning_representation(chunks[0])
         else:
             # Assuming that the chunks are in the right priority order.
             logger.warning('\033[91m' + 'Not implemented yet.' + '\033[0;0m \n\t' + '\n\t'.join(chunks))
-            raise NotImplementedError
+            raise NotImplementedError()
 
     @log_call(logging.getLogger('NLU'))
     def get_meaning_representation(self, input_prompt: str):
@@ -122,7 +125,8 @@ class NLU():
         except:
             logger.debug('\033[91m' + 'Error in parsing the meaning representation. Please try again.\n\n'
                          + raw_meaning_rep)
-            raise ValueError('Error in parsing the meaning representation. Please try again.')
+            raise NotImplementedError('Error Handling for meaning representation not implemented yet.'+
+                                      '\nTODO: Implement error handling for meaning representation.')
         logger.info(meaning_representation)
         
         return meaning_representation

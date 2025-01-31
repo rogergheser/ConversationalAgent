@@ -9,8 +9,8 @@ def clean_json_string(json_str: str) -> str:
         # Strip leading/trailing whitespace and artifacts
         json_str = json_str.strip()
         
-        # Extract JSON portion using regex
-        json_pattern = r'({.*?}|\[.*?\])'  # Matches JSON objects ({}) or arrays ([])
+        # Extract JSON object portion using regex
+        json_pattern = r'({.*?})'  # Matches JSON objects ({})
         match = re.search(json_pattern, json_str, re.DOTALL)
         
         if match:
@@ -33,6 +33,8 @@ def parse_json(json_str: str) -> Union[dict, list, None]:
     Raises:
         ValueError: If the input cannot be parsed into valid JSON after cleanup.
     """
+    if json_str[0] == '[' and json_str[-1] == ']':
+        json_str = json_str[1:-1]
     try:
         # Attempt to parse directly
         return json.loads(json_str)
@@ -42,7 +44,7 @@ def parse_json(json_str: str) -> Union[dict, list, None]:
             cleaned_json = clean_json_string(json_str)
             return json.loads(cleaned_json)
         except json.JSONDecodeError as e:
-            raise ValueError(f"Invalid JSON string after cleanup: {e}") from e
+            raise ValueError(f"Invalid JSON string after cleanup: {e}\n{cleaned_json}") from e
     except TypeError as e:
         raise ValueError(f"Input must be a string: {e}") from e
     
