@@ -33,8 +33,8 @@ class Chat():
         self.welcome_msg = cfg['CHAT']['welcome_msg']
         self.fallback_msg = cfg['CHAT']['fallback_msg']
         self.nlu = NLU(pre_nlu_cfg, nlu_cfg, self.history, self.logger)
-        self.nlg = NLG(nlg_cfg, self.history, self.logger)
         self.dm = DM(dm_cfg, self.history, self.logger)
+        self.nlg = NLG(nlg_cfg, self.history, self.logger)
         
         self.book_apartment_st = BookApartmentST()
         self.feedback_st = FeedbackST()
@@ -54,14 +54,14 @@ class Chat():
             'list_apartments': self.apartment_manager.list_apartments,
             'confirm_booking': self.apartment_manager.book_apartment,
             'feedback': self.apartment_manager.give_feedback,
-            'contact_operator' : self.apartment_manager.contact_human,
+            'contact_operator' : self.contact_human,
             'fallback' : self.handle_fallback
         })
 
         if os.environ['USER'] == 'amir.gheser':
             self.model, self.tokenizer = load_model(nlu_cfg['model_name'], parallel=False, device='cuda', dtype='b16')
         
-        self.history.add(self.welcome_msg, 'system', 'welcome_msg')
+        self.history.add(self.welcome_msg, 'assistant', 'welcome_msg')
 
         self.run_chat()
 
@@ -78,7 +78,7 @@ class Chat():
     def handle_fallback(self):
         self.logger.error('Fallback action triggered.')
         self.logger.error('Not implemented.')
-        self.history.add(self.fallback_msg, 'system', 'fallback')
+        self.history.add(self.fallback_msg, 'tool', 'fallback')
         return 'repeat_fallback_msg'
 
     def process_intent(self, meaning_representation):
@@ -101,27 +101,33 @@ class Chat():
                 self.logger.error(f'Unknown intent: {meaning_representation["intent"]}')
                 raise ValueError(f'Unknown intent: {meaning_representation["intent"]}')
 
+    def contact_human(self):
+        self.RUNNING = False
+        return self.apartment_manager.contact_human()
+
     def run_chat(self):
         print(self.welcome_msg)
+
         while self.RUNNING:
             user_input = input('User: ')
             if user_input.lower() == 'exit':
                 self.RUNNING = False
                 break
-            self.history.add(user_input, 'user', 'input')
+            meaning_representations = self.nlu(user_input)
+            self.history.add(user_input, 'user', 'input') # NLU feeds user input to the LLM internally
 
-            meaning_representation = self.nlu(user_input)
-            try:
-                next_best_action = self.process_intent(meaning_representation)
-            except:
-                self.logger.error('Error in processing the intent. Meaning representation: \n' + str(meaning_representation))
-                self.logger.error('Error handling not implemented yet.\nTODO: Implement error handling for intent processing.')
+            NBAs = []
+            for meaning_representation in meaning_representations:
+                try:
+                    NBAs.append(self.process_intent(meaning_representation))
+                except:
+                    self.logger.error('Error in processing the intent. Meaning representation: \n' + str(meaning_representation))
+                    self.logger.error('Error handling not implemented yet.\nTODO: Implement error handling for intent processing.')
 
+            lexicalised_response = self.nlg(NBAs)
 
-            lexicalised_response = self.nlg(next_best_action)
-
-            self.history.add(lexicalised_response, 'system', 'lexicalised_NBA')
-            print(f'System: {lexicalised_response}')
+            self.history.add(lexicalised_response, 'assistant', 'lexicalised_NBA')
+            print(f'Assistant: {lexicalised_response}')
 
 
 if __name__ == '__main__':

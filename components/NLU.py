@@ -2,7 +2,8 @@ import logging
 import ollama
 import os
 import re
-
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils import *
 from typing import Union, Optional
 
@@ -12,7 +13,7 @@ class PreNLU():
     def __init__(self,
                  cfg: dict,
                  history: ConversationHistory,
-                 logger: Any):
+                 logger: logging.Logger):
         self.cfg = cfg
         self.history = history
         self.logger = logger
@@ -22,24 +23,56 @@ class PreNLU():
     def __call__(self, prompt: str):
         chunk_list = self.query_model(self.cfg['model_name'], self.cfg['system_prompt_file'], prompt)
         try:
-            chunk_list = json.loads(chunk_list)
+            chunk_list = parse_json(chunk_list, with_list=True)
+            
+            if 'chunk' in chunk_list and 'intent' in chunk_list \
+                    and isinstance(chunk_list, dict):
+                chunk_list = [chunk_list]
+            
+            if len(chunk_list) > 1:
+                self.logger.debug(chunk_list)
+                chunk_dict = self.post_process(chunk_list)
+                
+            
             chunk_list = [val["chunk"] for val in chunk_list]
-        except:
+        except Exception as e:
             logger.debug('\033[91m' + 'Error in parsing the intent list. Please try again.\n\t'
                          + "\n\t".join(chunk_list))
+            logger.debug(e)
             raise ValueError('Error in parsing the intent list. Please try again.')
 
         return chunk_list
+
+    def post_process(self, chunk_list)->dict:
+        """
+        Post-process the chunks to fix errors and assign correct priority
+        """
+        print(chunk_list)
+        ret_chunk_dict = {}
+        # Group chunks based on intent
+
+        for val in chunk_list:
+            intent, chunk = val['intent'], val['chunk']
+            if intent in ret_chunk_dict:
+                ret_chunk_dict[intent] += ' ' + chunk
+            else:
+                ret_chunk_dict[intent] = chunk
+
+        if len(ret_chunk_dict) < len(chunk_list):
+            self.logger.error('\033[91m' + '[HANDLED ERROR]' + '\033[0;0m' + 'Detected and merged chunks.')
+        
+        print(ret_chunk_dict)
+        return ret_chunk_dict
 
     def query_model(self, model_name: str, system: str, input_text: Union[str, bool]=False, max_seq_len: int=128):
         system_prompt = open(system, 'r').read()
         user_env = os.getenv('USER')
         if user_env == 'amir.gheser':
             hist = self.history.to_msg_history()
-            hist = hist[-5:] if len(hist > 5) else hist
+            hist = hist[-2:] if len(hist > 2) else hist
             history = "\n".join([f"{k['role']}: {k['content']}"  for k in hist])
-            # input = system_prompt + '\n' + history + '\n' + input_text
-            input = system_prompt + '\nUser:\n' + input_text
+            input = system_prompt + '\n' + history + '\n' + input_text
+            # input = system_prompt + '\nUser:\n' + input_text
 
             input = self.tokenizer(input, return_tensors="pt").to(self.model.device)
             response = generate(self.model, input, self.tokenizer, max_new_tokens=max_seq_len)
@@ -50,11 +83,7 @@ class PreNLU():
             messages = [{
                             'role':'system',
                             'content': system_prompt
-                            }]
-                        # + [{
-                        #     'role':'system',
-                        #     'content': system_prompt
-                        #     }]
+                            }] + self.history.to_msg_history(hist_len=2)
             if input_text:
                 messages.append({
                     'role': 'user',
@@ -64,6 +93,8 @@ class PreNLU():
             response = ollama.chat(model=model_name, messages=
                 messages
             )
+            self.logger.info(f"[PreNLU]: {response.total_duration / 1e9:.2f} seconds.")
+            self.logger.info(f"[PreNLU]: {response.eval_count / response.total_duration * 1e9:.2f} tokens/s.")
             return response['message']['content']
         else:
             raise ValueError('Unknown user environment. Please set the USER environment variable.')
@@ -109,13 +140,22 @@ class NLU():
         logger.debug(chunks)
 
         if len(chunks) == 1:
-            return self.get_meaning_representation(chunks[0])
+            return [self.get_meaning_representation(chunks[0])]
         elif chunks[0] == chunks[1]:
-            return self.get_meaning_representation(chunks[0])
+            return [self.get_meaning_representation(chunks[0])]
         else:
             # Assuming that the chunks are in the right priority order.
-            logger.warning('\033[91m' + 'Not implemented yet.' + '\033[0;0m \n\t' + '\n\t'.join(chunks))
-            raise NotImplementedError()
+            meaning_representations = []
+            for chunk in chunks:
+                meaning_representations.append(self.get_meaning_representation(chunk))
+            
+            meaning_representations = self.post_process(meaning_representations)
+
+            return meaning_representations
+
+    def post_process(self, meaning_representations):
+        self.logger.debug("NLU PostProcessing not implemented yet.")
+        return meaning_representations
 
     @log_call(logging.getLogger('NLU'))
     def get_meaning_representation(self, input_prompt: str):
@@ -129,15 +169,13 @@ class NLU():
                                       '\nTODO: Implement error handling for meaning representation.')
         logger.info(meaning_representation)
         
-        return meaning_representation
-    
-    
+        return meaning_representation        
+
     def query_model(self, model_name: str, system: str, input_text: Union[str, bool]=False, max_seq_len: int=128):
         system_prompt = open(system, 'r').read()
         user_env = os.getenv('USER')
         if user_env == 'amir.gheser':
-            hist = self.history.to_msg_history()
-            hist = hist[-5:] if len(hist > 5) else hist
+            hist = self.history.to_msg_history(hist_len=5)
             history = "\n".join([f"{k['role']}: {k['content']}"  for k in hist])
             input = system_prompt + '\n' + history + '\n' + input_text
 
@@ -150,11 +188,7 @@ class NLU():
             messages = [{
                             'role':'system',
                             'content': system_prompt
-                            }] + self.history.to_msg_history()
-                        # + [{
-                        #     'role':'system',
-                        #     'content': system_prompt
-                        #     }]
+                            }] + self.history.to_msg_history(hist_len=5)
             if input_text:
                 messages.append({
                     'role': 'user',
@@ -164,6 +198,8 @@ class NLU():
             response = ollama.chat(model=model_name, messages=
                 messages
             )
+            self.logger.info(f"[NLU]: {response.total_duration / 1e9:.2f} seconds.")
+            self.logger.info(f"[NLU]: {response.eval_count / response.total_duration * 1e9:.2f} tokens/s.")
             return response['message']['content']
         else:
             raise ValueError('Unknown user environment. Please set the USER environment variable.')

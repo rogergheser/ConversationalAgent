@@ -31,11 +31,10 @@ class NLG:
         return self.lexicalise(nba)
 
     @log_call(logger=logging.getLogger('chat_logger'))
-    def lexicalise(self, action):
-        self.logger.debug('lexicalise: ' + action)
-        lexicalised_text = self.query_model(self.nlg_cfg['model_name'], self.nlg_cfg['system_prompt_file'], input_text=action)
-
-        # self.history.add(lexicalised_text, 'system', action)
+    def lexicalise(self, actions: list[str]):
+        self.logger.info('lexicalise: \n\t' + '\n\t'.join(actions))
+        input_text = ', '.join(list(set(actions)))
+        lexicalised_text = self.query_model(self.nlg_cfg['model_name'], self.nlg_cfg['system_prompt_file'], input_text=input_text)
 
         return lexicalised_text
     
@@ -43,8 +42,7 @@ class NLG:
         system_prompt = open(system, 'r').read()
         user_env = os.getenv('USER')
         if user_env == 'amir.gheser':
-            hist = self.history.to_msg_history()
-            hist = hist[-5:] if len(hist > 5) else hist
+            hist = self.history.to_msg_history(hist_len=5)
             history = "\n".join([f"{k['role']}: {k['content']}"  for k in hist])
             input = system_prompt + '\n' + history + '\n' + input_text
 
@@ -57,20 +55,18 @@ class NLG:
             messages = [{
                             'role':'system',
                             'content': system_prompt
-                            }] + self.history.to_msg_history()
-                        # + [{
-                        #     'role':'system',
-                        #     'content': system_prompt
-                        #     }]
+                            }] + self.history.to_msg_history(hist_len=5)
             if input_text:
                 messages.append({
-                    'role': 'user',
+                    'role': 'tool',
                     'content': input_text
                 })
             self.logger.debug(messages, extra={"color": "blue"})
             response = ollama.chat(model=model_name, messages=
                 messages
             )
+            self.logger.info(f"[NLG]: {response.total_duration / 1e9:.2f} seconds.")
+            self.logger.info(f"[NLG]: {response.eval_count / response.total_duration * 1e9:.2f} tokens/s.")
             return response['message']['content']
         else:
             raise ValueError('Unknown user environment. Please set the USER environment variable.')

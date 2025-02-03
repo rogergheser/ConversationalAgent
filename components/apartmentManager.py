@@ -48,7 +48,7 @@ class ApartmentManager():
         apartments = apartments.to_dict(orient='records')
         
         images = []
-        msg = ''
+        msg = 'The following are our available apartments:\n'
         for apartment in apartments:
             msg += ''.join(['Apartment[', str(apartment['id']),
                   '] -- ', apartment['name'],
@@ -59,7 +59,8 @@ class ApartmentManager():
             
             images.append(get_image(apartment['path'], apartment['id'], apartment['name']))
         
-        self.history.add(msg, 'system', 'list_apartments')
+        self.history.add(msg, 'tool', 'list_apartments')
+        print(msg)
 
         return 'list_apartments'
     
@@ -68,14 +69,14 @@ class ApartmentManager():
         if self.book_apartment_st.is_valid():
             booking_msg = self.book_apartment_st.get_booking_msg()
             self.history.add(booking_msg, 
-                             'system', 
+                             'assistant', 
                              'confirm_booking')
             self.service.book_apartment(self.book_apartment_st.to_dict()) #! Dummy function
             return 'confirm_booking()'
         else:
             self.logger.debug('[ERROR CAUGHT] Missing information to book an apartment.')
-            self.history.add('Please provide all the necessary information to book an apartment', 
-                             'system', 
+            self.history.add('User MUST provide all the necessary information to book an apartment', 
+                             'tool', 
                              'error_handling')
             
             missing_field = None
@@ -86,8 +87,8 @@ class ApartmentManager():
 
             if field is not None:
                 self.history.add('There must have been an error in the pipeline.'
-                                 'I must ask the user to provide a missing field as the booking request is not fully filled.',
-                                 'system', 'error_handling')
+                                 'The assistant must ask the user to provide a missing field as the booking request is not fully filled.',
+                                 'tool', 'error_handling')
                 return f'ask_info({field})'
             else:
                 raise ValueError("Non-empty dictionary signaled as empty")
@@ -96,7 +97,7 @@ class ApartmentManager():
         pass
 
     def contact_human(self)->str:
-        self.history.add('A human operator has been notified and will respond as soon as he\'s available', 'system', 'contact_operator')
+        self.history.add('A human operator has been notified and will respond as soon as he\'s available', 'tool', 'contact_operator')
         return 'contact_operator'
 
 def show_image(path, id, name):

@@ -1,5 +1,6 @@
 import logging
 import textwrap
+import json
 from .stateTracker import DialogueST
 
 class BookApartmentST(DialogueST):
@@ -38,9 +39,10 @@ class BookApartmentST(DialogueST):
         return ', '.join([f'{key}: {value}' for key, value in self.apartment_booking.items()])
 
     def to_dict(self):
-        return {
+        return json.dumps({
             "intent": "book_apartment",
-                "slots" : self.apartment_booking}
+            "slots" : self.apartment_booking
+        })
 
     def is_valid(self):
         for field in self.apartment_booking:
@@ -94,9 +96,10 @@ class FeedbackST(DialogueST):
         return ', '.join([f'{key}: {value}' for key, value in self.feedback.items()])
     
     def to_dict(self):
-        return {
+        return json.dumps({
             "intent": "feedback",
-                "slots" : self.feedback}
+            "slots" : self.feedback
+        })
     
     def is_valid(self):
         for field in self.feedback:
@@ -135,9 +138,10 @@ class RequestExplanationST(DialogueST):
         return ', '.join([f'{key}: {value}' for key, value in self.feedback.items()])
 
     def to_dict(self):
-        return {
+        return json.dumps({
             "intent": "feedback",
-                "slots" : self.feedback}
+            "slots" : self.feedback
+        })
 
     def is_valid(self):
         for field in self.feedback:
@@ -160,22 +164,13 @@ class ListApartmentsST(DialogueST):
             logging.warning('No slots found in parsed input.')
             return
 
-        parsed_input = parsed_input['slots']
-        for field in parsed_input:
-            if parsed_input[field] == 'null':
-                continue
-            if field in self.list_apartments:
-                self.list_apartments[field] = parsed_input[field]
-            else:
-                logging.warning(f'Field {field} not found in order fields.')
-
     def __str__(self):
         return ', '.join([f'{key}: {value}' for key, value in self.apartment_booking.items()])
     
     def to_dict(self):
-        return {
+        return json.dumps({
             "intent": "list_apartments",
-                "slots" : self.list_apartments}
+            "slots" : {}})
     
     def is_valid(self):
         for field in self.list_apartments:

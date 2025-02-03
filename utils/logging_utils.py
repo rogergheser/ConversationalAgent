@@ -47,5 +47,5 @@ def logger_cfg(logger, debug_color="red", info_color="white"):
     # Add handlers to logger
     logger.addHandler(debug_file_handler)
     logger.addHandler(info_file_handler)
-    logger.addHandler(console_handler_debug)
-    logger.addHandler(console_handler_info)
+    # logger.addHandler(console_handler_debug)
+    # logger.addHandler(console_handler_info)

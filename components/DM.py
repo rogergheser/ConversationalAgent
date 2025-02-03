@@ -52,7 +52,7 @@ class DM:
         """
         Query the dialogue manager model to get the next best action to perform.
         """
-        meaning_representation = state_tracker.to_dict()
+        meaning_representation = '```\n' + state_tracker.to_dict() + '\n```'
         raw_action = self.query_model(self.dm_cfg['model_name'], self.dm_cfg['system_prompt_file'], str(meaning_representation))
         # action = parse_json(raw_action) # TODO what to parse? Do we need to parse?
         # Define a format for asking info
@@ -60,8 +60,8 @@ class DM:
         try:
             action, arguments = extract_action_and_arguments(raw_action)
         except:
-            self.logger.debug('\033[91m' + 'Error in parsing the action. Please try again.\n\n'
-                         + raw_action)
+            self.logger.debug('\033[91m' + 'Error in parsing the action. Please try again.\n\n' 
+                              + '\033[0m'+ raw_action)
             return
         self.logger.info(str(action) + ' [' + ', '.join(arguments) + ']')
         return action, arguments
@@ -70,6 +70,12 @@ class DM:
     def nba_handler(self, action, args, kwargs=None)->str:
         match action:
             case 'ask_info':
+                if len(args) == 0:
+                    raise ValueError('No arguments provided for ask_info action.')
+                elif len(args) > 2:
+                    self.logger.debug('[ERROR HANDLING] More than 2 arguments provided for ask_info action.'
+                                      + 'Not an overinformative system.')
+                    return f'ask_info({args[0]}, {args[1]})'
                 return f'ask_info({(", ").join(args)})'
             case 'request_info':
                 return f'ask_info({(", ").join(args)})'
@@ -104,20 +110,18 @@ class DM:
             messages = [{
                             'role':'system',
                             'content': system_prompt
-                            }] + self.history.to_msg_history()
-                        # + [{
-                        #     'role':'system',
-                        #     'content': system_prompt
-                        #     }]
+                            }] + self.history.to_msg_history(hist_len=5)
             if input_text:
                 messages.append({
-                    'role': 'user',
+                    'role': 'tool',
                     'content': input_text
                 })
             self.logger.debug(messages, extra={"color": "blue"})
             response = ollama.chat(model=model_name, messages=
                 messages
             )
+            self.logger.info(f"[DM]: {response.total_duration / 1e9:.2f} seconds.")
+            self.logger.info(f"[DM]: {response.eval_count / response.total_duration * 1e9:.2f} tokens/s.")
             return response['message']['content']
         else:
             raise ValueError('Unknown user environment. Please set the USER environment variable.')
