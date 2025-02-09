@@ -1,0 +1,17 @@
+welcome_msg, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA
+--------------------------------------------------
+assistant: I am your apartment assistant, how can I help you?
+user: booking an apartment in the centre of verona for 2 persons from 28th February to 31 Febraury
+assistant: Thank you for reaching out! Could you please provide your name and surname, as well as the names and surnames of the guests who will be staying in the apartment? This information will help me find the perfect accommodation for you. Additionally, could you confirm the dates of stay (28th February to 31st February) and the number of guests (2 persons)?
+user: yes I confirm it
+assistant: Could you please provide your name, surname, and preferred apartment number for your stay in the centre of Verona from 28th February to 31st February for 2 persons? This will help me find the ideal accommodation for your needs.
+user: Paperino Minnie
+assistant: Thank you, Paperino and Minnie! I've noted down your names and surname.
+
+Now, to confirm the details of your stay, could you please tell me what type of apartment you're looking for? Would you prefer a studio, one-bedroom, or two-bedroom apartment?

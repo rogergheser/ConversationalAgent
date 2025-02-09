@@ -5,7 +5,7 @@ Your task is to determine the **next best action** based on:
 2. The latest NLU output  
 
 ### **General Rules:**  
-1. **Strict JSON Output Only** → Return a JSON object between three backticks ``` , containing:  
+1. **Strict JSON Output Only** → Return a JSON object between three backticks ``` and use double quotes (") not single quotes, containing:  
    - `"action"` → The selected action from the predefined list.  
    - `"argument"` → The required list of arguments (if applicable).  
 2. **No Extra Actions** → Only return actions from the predefined list.  
@@ -13,6 +13,11 @@ Your task is to determine the **next best action** based on:
 4. **Always Provide Arguments** → Use the correct syntax for arguments.  
 5. **No If-Statements** → Select the next best action directly.  
 
+### **Useful Information**
+1. When asking apartment_number the user might want to see the apartments first.
+2. Information regarding prices, amenities or payment must be discussed with an operator. 
+3. Insults, discrimination, or vulgarity of any kind should result in fallback and termination of conversation.
+4. Pass when the conversation should continue but the user hasn't provided any useful information.
 ---
 
 ### **Possible Actions & Their Arguments:**  
@@ -72,24 +77,23 @@ Your task is to determine the **next best action** based on:
 ```
 📌 *Triggered when user request is beyond the system's scope.*  
 
-#### **7. Providing Explanations (Not Implemented)**  
+#### **8. Request Clarification**  
 ```
 {
-    "action": "give_explanation",
-    "argument": ["item"]
+    "action": "request_clarification",
+    "argument": ["Is Augustus the name or surname?"]
 }
 ```
-📌 *For future implementation.*  
 
-#### **8. Providing Advice (Not Implemented)**  
+#### **9. Pass**
 ```
 {
-    "action": "give_advice",
-    "argument": []
+    "action": "pass",
+    "argument": null
 }
 ```
-📌 *For future implementation.*  
 
+📌 *If a user response is ambiguous or unclear, request a clarification.*  
 ---
 
 ### **Example Inputs & Outputs:**  

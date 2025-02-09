@@ -1,6 +1,6 @@
 id;name;row;path;isFree;maxPeople
-55980;Verona Centre Apartments;0;data/images/0.jpeg;1;5
-91682;Al 18 Verona Rooms;1;data/images/1.jpeg;1;2
-9946;Arena Dreams Apartments;2;data/images/2.jpeg;1;4
-50636;Vitti’s Home Verona 3;3;data/images/3.jpeg;1;2
-15917;Romeo Secret Rooms;4;data/images/4.jpeg;0;5
+1;Verona Centre Apartments;0;data/images/0.jpeg;1;5
+2;Al 18 Verona Rooms;1;data/images/1.jpeg;1;2
+3;Arena Dreams Apartments;2;data/images/2.jpeg;1;4
+4;Vitti’s Home Verona 3;3;data/images/3.jpeg;1;2
+5;Romeo Secret Rooms;4;data/images/4.jpeg;0;5

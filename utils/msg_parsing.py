@@ -32,16 +32,19 @@ def parse_json(json_str: str, with_list:bool = False, replace_quotes = True) -> 
     Raises:
         ValueError: If the input cannot be parsed into valid JSON after cleanup.
     """
-    if json_str.startswith('```') and json_str.endswith('```'):
-        json_str = json_str[3:-3]
+    if json_str.startswith('***'):
+        json_str = json_str[3:]
+    try:
+        json_str = json_str.split('```', 1)[1].rsplit('```', 1)[0]
         if json_str.startswith('json'):
             json_str = json_str[4:]
-    
+    except:
+        logging.error(f"Error in parsing the JSON string\n Missing '```': {json_str}")
     if  not with_list and json_str[0] == '[' and json_str[-1] == ']':
         json_str = json_str[1:-1]
     
-    if replace_quotes:
-        json_str = json_str.replace('\'', '\"')
+    # if replace_quotes:
+    #     json_str = json_str.replace('\'', '\"')
     
     try:
         # Attempt to parse directly
@@ -56,7 +59,7 @@ def parse_json(json_str: str, with_list:bool = False, replace_quotes = True) -> 
                 # Try cleaning the string and parsing again
                 cleaned_json = cleaned_json.split('{', 1)[1].rsplit('}', 1)[0]
                 logging.error(f"Cleaned JSON: {cleaned_json}")
-                return json.loads('{'+cleaned_json+'}')
+                return json.loads('{\n  '+cleaned_json+'\n}')
             except json.JSONDecodeError as e:
                 raise ValueError(f"Invalid JSON string after cleanup: {e}\n{cleaned_json}") from e
     except TypeError as e:

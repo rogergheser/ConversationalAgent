@@ -60,7 +60,7 @@ class ApartmentManager():
             images.append(get_image(apartment['path'], apartment['id'], apartment['name']))
         
         self.history.add(msg, 'tool', 'list_apartments')
-        print(msg)
+        print("\033[92m" + msg + "\033[0m")
 
         return 'list_apartments'
     
@@ -72,7 +72,19 @@ class ApartmentManager():
                              'assistant', 
                              'confirm_booking')
             self.service.book_apartment(self.book_apartment_st.to_dict()) #! Dummy function
-            return 'confirm_booking()'
+            stop = input("\033[91m" + booking_msg + "\033[0m\nAssistant: Would you like to confirm the booking? (Y/N): ")
+            if stop.lower() == 'y':
+                self.history.add('User confirmed booking', 'user', 'confirm_booking')
+                self.history.add('Booking confirmed', 'tool', 'confirm_booking')
+                self.history.add('STOP_EXECUTION', 'tool', 'STOP')
+                return 'confirmed_booking_message'
+            else:
+                self.history.add('User denied booking', 'user', 'confirm_booking')
+                return 'ask_info(incorrect_slots)'
+
+            # self.history.add('STOP_EXECUTION', 'tool', 'STOP')
+
+            # return 'confirm_booking()'
         else:
             self.logger.debug('[ERROR CAUGHT] Missing information to book an apartment.')
             self.history.add('User MUST provide all the necessary information to book an apartment', 
@@ -94,11 +106,11 @@ class ApartmentManager():
                 raise ValueError("Non-empty dictionary signaled as empty")
 
     def give_feedback(self)->str:
-        pass
+        return 'pass()'
 
     def contact_human(self)->str:
         self.history.add('A human operator has been notified and will respond as soon as he\'s available', 'tool', 'contact_operator')
-        return 'contact_operator'
+        return 'contact_operator()'
 
 def show_image(path, id, name):
     img = Image.open(path)

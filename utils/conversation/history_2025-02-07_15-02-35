@@ -1,0 +1,42 @@
+welcome_msg, 
+input, 
+lexicalised_NBA, 
+input, 
+error_handling, 
+error_handling, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+confirm_booking, 
+STOP, 
+lexicalised_NBA
+--------------------------------------------------
+assistant: I am your apartment assistant, how can I help you?
+user: I want to stay at apartment 50636 for 2 nights
+assistant: Could you please provide the name and surname of the guest(s) that will be staying in apartment 50636 for 2 nights? This information is required to complete your booking.
+user: The name is Amir and surname is Gheser, I will be staying alone
+tool: User MUST provide all the necessary information to book an apartment
+tool: There must have been an error in the pipeline.The assistant must ask the user to provide a missing field as the booking request is not fully filled.
+assistant: Could you please provide the name and surname of the guest(s) that will be staying in apartment 50636 for 2 nights? Additionally, could you also share a copy of your identification document (please specify the type: driver's license, passport, etc.) and the document number? This information is required to complete your booking.
+user: Sure, i will share a copy of my passport
+assistant: Thank you for providing that information! Could you please confirm the document number on your passport and also provide the start date of your stay in apartment 50636? This will help me to complete your booking.
+user: The number is AY1274. I will start on the 4th of February 2025
+assistant: Could you please provide the end date of your stay in apartment 50636, starting from February 4th, 2025? This will help me to finalize your booking.
+user: I will stay til the 8th
+assistant: Please confirm the booking details.
+
+Booking details:
+
+Apartment number: 50636
+Full Name: Amir Gheser
+Document type: passport
+Document number: AY1274
+Number of guests: 2
+From: 04/02/25
+To: 08/02/25
+
+tool: STOP_EXECUTION
+assistant: Could you please provide the number of nights you plan to stay in apartment 50636?

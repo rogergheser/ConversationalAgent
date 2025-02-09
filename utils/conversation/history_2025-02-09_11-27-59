@@ -1,0 +1,59 @@
+welcome_msg, 
+input, 
+list_apartments, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+confirm_booking, 
+confirm_booking, 
+lexicalised_NBA, 
+input
+--------------------------------------------------
+assistant: Hi! I'm your apartment assistant. I can help you book an apartment. Would you like me to start by showing you our options?
+user: Sure, I need apartments for 3
+tool: The following are our available apartments:
+Apartment[1] -- Verona Centre Apartments
+Max guests: 5
+Preview: - check image for preview - 
+Apartment[2] -- Al 18 Verona Rooms
+Max guests: 2
+Preview: - check image for preview - 
+Apartment[3] -- Arena Dreams Apartments
+Max guests: 4
+Preview: - check image for preview - 
+Apartment[4] -- Vitti’s Home Verona 3
+Max guests: 2
+Preview: - check image for preview - 
+
+assistant: "Certainly! Here are the available apartments along with their details and images. Please let me know if you need more information."
+user: Ok, apartment 2 seems nice
+assistant: "Could you please provide your name and surname for the booking? This will help us process your reservation smoothly."
+user: Amir Gheser
+assistant: "Thank you, Amir! For your booking, could you please provide the type of document you will use for verification (e.g., passport, ID card) and its number?"
+user: Identity Card: AY1345
+assistant: "Could you please provide the start date and end date for your stay? This will help me find the best apartment options for you."
+user: 15-19 of March please
+assistant: "I have found a suitable apartment for your dates. It's available from 15th to 19th March. Would you like to book it?"
+user: Yes please
+assistant: Please confirm the booking details.
+
+Booking details:
+
+Apartment number: 2
+Full Name: Amir Gheser Gheser
+Document type: Identity Card
+Document number: AY1345
+Number of guests: 2
+From: 15/03
+To: 19/03
+
+user: User denied booking
+assistant: "I apologize for the mistake. Could you please provide more information on what went wrong? Was there an error in the document type or number, or was it something else?"
+user: I asked for a reservation for 3 guests

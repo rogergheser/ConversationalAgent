@@ -1,5 +1,5 @@
 import logging
-
+import json
 from typing import Optional, Union, Any
 from abc import ABC, abstractmethod
 
@@ -165,8 +165,10 @@ class FallbackST(DialogueST):
         return ', '.join([f'{key}: {value}' for key, value in self.fallback.items()])
     
     def to_dict(self):
-        return {"intent": "fallback",
-                "slots" : self.fallback}
+        return json.dumps({
+            "intent": "fallback",
+            "slots" : self.fallback
+            })
     
     def is_valid(self):
         return True
@@ -210,8 +212,10 @@ class AppointmentST(DialogueST):
         return ', '.join([f'{key}: {value}' for key, value in self.appointment.items()])
 
     def to_dict(self):
-        return {"intent": "set_appointment",
-                "slots" : self.appointment}
+        return json.dumps({
+            "intent": "set_appointment",
+            "slots" : self.appointment
+            })
 
     def is_valid(self):
         for field in self.appointment:

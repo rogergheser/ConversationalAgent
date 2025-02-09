@@ -1,0 +1,15 @@
+welcome_msg, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA
+--------------------------------------------------
+assistant: I am your apartment assistant, how can I help you?
+user: I would like to book an apartment
+assistant: To proceed with the booking, could you please provide me with your name and surname? This information will be used to finalize the reservation.
+user: My name is Amir, my surname is Gheser
+assistant: Thank you for providing that information, Amir! I have noted your name as Amir and your surname as Gheser. Now, could you please share with me the type of document you will be presenting to confirm your identity? Would you like to provide a passport, driver's license, or another form of identification?
+user: I will provide an ID, the number is AY1247
+assistant: Thank you for sharing the document number, Amir! The document number you provided is AY1247. May I confirm that this is indeed your identification number? If so, please let me know what type of ID it corresponds to (passport, driver's license, etc.).

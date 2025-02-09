@@ -1,0 +1,21 @@
+welcome_msg, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA
+--------------------------------------------------
+assistant: I am your apartment assistant, how can I help you?
+user: hello, i would like to book an apartment. could you help me?
+assistant: I'd be happy to help you with that! To better assist you, could you please provide your name and surname? This will help me find the best apartment for you.
+user: Francesco Addante
+assistant: Thank you, Francesco Addante! I have recorded your name and surname. To proceed with booking an apartment, could you please provide the number of guests that will be staying with you?
+user: 1.5
+assistant: Could you please clarify the number of guests for your booking? I understand it's 1.5, but our system is set up to accommodate whole numbers only. Would you like me to suggest an apartment that can comfortably accommodate one guest, or would you prefer to adjust your travel plans to fit a single-guest apartment?
+user: okay I'll count my friend oleg as 1 instead as 0.5. May you suggest me an apartment for 2?
+assistant: I've adjusted the guest count to 2! For a two-person booking, I recommend our premier apartment, Apartment 202, located in the heart of the city. It features a comfortable living area, a fully equipped kitchen, and a spacious bedroom with an en-suite bathroom. The apartment also comes with a private balcony offering stunning city views.
+
+Would you like to book Apartment 202 for your stay?

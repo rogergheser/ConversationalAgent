@@ -5,17 +5,17 @@ from .stateTracker import DialogueST
 
 class BookApartmentST(DialogueST):
     def __init__(self):
-        fields = [
-            "apartment_number",
+        self.fields = [
             "name",
             "surname",
             "document_type",
             "document_number",
-            "guest_number",
             "start_date",
             "end_date",
+            "guest_number",
+            "apartment_number",
         ]
-        self.apartment_booking = { field: None for field in fields }
+        self.apartment_booking = { field: None for field in self.fields }
 
     def update(self, parsed_input):
         if 'intent' in parsed_input:
@@ -59,8 +59,8 @@ class BookApartmentST(DialogueST):
             Document type: {document_type}
             Document number: {document_number}
             Number of guests: {guest_number}
-            From: {from_date}
-            To: {to_date}
+            From: {start_date}
+            To: {end_date}
         """).format(**self.apartment_booking)
     
     def get_booking_msg(self):
@@ -68,11 +68,11 @@ class BookApartmentST(DialogueST):
 
 class FeedbackST(DialogueST):
     def __init__(self):
-        fields = [
+        self.fields = [
             "type",
             "feedback"
         ]
-        self.feedback = { field: None for field in fields }
+        self.feedback = { field: None for field in self.fields }
 
     def update(self, parsed_input):
         if 'intent' in parsed_input:
@@ -109,10 +109,10 @@ class FeedbackST(DialogueST):
     
 class RequestExplanationST(DialogueST):
     def __init__(self):
-        fields = [
+        self.fields = [
             "issue",
         ]
-        self.feedback = { field: None for field in fields }
+        self.feedback = { field: None for field in self.fields }
 
         raise NotImplementedError
 
@@ -151,9 +151,9 @@ class RequestExplanationST(DialogueST):
     
 class ListApartmentsST(DialogueST):
     def __init__(self):
-        fields = []
+        self.fields = []
 
-        self.list_apartments = { field: None for field in fields }
+        self.list_apartments = { field: None for field in self.fields }
 
     def update(self, parsed_input):
         if 'intent' in parsed_input:

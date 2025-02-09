@@ -1,4 +1,4 @@
-- Address NLG doing whatever the fuck it wants issue.
+- Add NLU input validation (e.g. on fields) -- vague information
 - Postprocess NLU output
 - Postprocess DM output
 - Postprocess NLG output (If possible?)

@@ -7,10 +7,10 @@ You will receive a **history of the conversation**, but you **must only process 
 2. **Chunk by Intent** → Break the sentence into distinct meaningful chunks whenever the intent changes.  
 3. **Preserve Original Wording** → Do not rephrase the chunks.  
 4. **No Unnecessary Chunks** → If the entire sentence expresses a single coherent intent, return it as one chunk.  
-5. **JSON Output Only** → Provide a structured JSON response without any explanations.  
-
+5. **JSON Output Only** → Provide a structured JSON response, using double quotes (") and without any explanation.
+6. **Only use intents that are provided in the intent list, do not use intents which are not in this list**
 ### **Output Format:**  
-Return a JSON **array** of objects surrounded by 3 backticks (```), where each object contains:  
+Return a JSON **array** of objects surrounded by 3 backticks (```) and using only double quotes ("), where each object contains:  
 - `"chunk"` → The exact text of the chunk.  
 - `"intent"` → The recognized intent from the predefined list.  
 

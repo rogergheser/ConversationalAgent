@@ -1,7 +1,7 @@
 import omegaconf
 import logging
 import os
-
+import traceback
 from components import (
     NLU,
     DM,
@@ -55,7 +55,8 @@ class Chat():
             'confirm_booking': self.apartment_manager.book_apartment,
             'feedback': self.apartment_manager.give_feedback,
             'contact_operator' : self.contact_human,
-            'fallback' : self.handle_fallback
+            'fallback' : self.handle_fallback,
+            'pass' : lambda: 'ask_clarification(user_intent)'
         })
 
         if os.environ['USER'] == 'amir.gheser':
@@ -79,7 +80,8 @@ class Chat():
         self.logger.error('Fallback action triggered.')
         self.logger.error('Not implemented.')
         self.history.add(self.fallback_msg, 'tool', 'fallback')
-        return 'repeat_fallback_msg'
+        self.RUNNING = False
+        return 'repeat_fallback_msg()'
 
     def process_intent(self, meaning_representation):
         match meaning_representation['intent']:
@@ -93,6 +95,7 @@ class Chat():
                 self.feedback_st.update(meaning_representation)
                 return self.dm(self.feedback_st)
             case 'contact_operator':
+                self.RUNNING = False
                 return self.dm('contact_operator')
             case 'fallback':
                 self.fallback_st.update(meaning_representation)
@@ -106,7 +109,7 @@ class Chat():
         return self.apartment_manager.contact_human()
 
     def run_chat(self):
-        print(self.welcome_msg)
+        print(f'\033[92m{self.welcome_msg}\033[0m')
 
         while self.RUNNING:
             user_input = input('User: ')
@@ -120,14 +123,18 @@ class Chat():
             for meaning_representation in meaning_representations:
                 try:
                     NBAs.append(self.process_intent(meaning_representation))
-                except:
-                    self.logger.error('Error in processing the intent. Meaning representation: \n' + str(meaning_representation))
+                except Exception as e:
+                    self.logger.error('Exception: \n' + traceback.format_exc() + '\n' + str(e))
+                    self.logger.error('\nError in processing the intent. Meaning representation: \n' + str(meaning_representation))
                     self.logger.error('Error handling not implemented yet.\nTODO: Implement error handling for intent processing.')
 
             lexicalised_response = self.nlg(NBAs)
 
+            if self.history.actions[-1] == 'STOP' and self.history.roles[-1] == 'tool':
+                self.RUNNING = False
+
             self.history.add(lexicalised_response, 'assistant', 'lexicalised_NBA')
-            print(f'Assistant: {lexicalised_response}')
+            print(f'\033[92mAssistant: {lexicalised_response}\033[0m')
 
 
 if __name__ == '__main__':

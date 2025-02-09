@@ -1,0 +1,80 @@
+welcome_msg, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+list_apartments, 
+lexicalised_NBA, 
+input, 
+confirm_booking, 
+confirm_booking, 
+lexicalised_NBA, 
+input, 
+confirm_booking, 
+confirm_booking, 
+confirm_booking
+--------------------------------------------------
+assistant: I am your apartment assistant, how can I help you?
+user: I wanna book an apartment
+assistant: To complete the booking process, could you please provide me with your name and surname? This will help me to assign a unique ID to your reservation.
+user: My full name is Amir Gheser
+assistant: Thank you, Amir Gheser! I have recorded your name and surname successfully. Next, could you please tell me the purpose of your stay? Is it for business or leisure? This information will help me to suggest the most suitable apartment options for you.
+user: I'm staying for pleasure
+assistant: Wonderful! I've noted that your stay is for leisure purposes.
+
+To proceed with the booking, could you please provide me with the type of document you have (e.g. ID card, passport) and its corresponding number? This will help me to verify your identity and complete the booking process.
+user: So my passport is IT0192A
+assistant: Thank you for providing your passport details, Amir Gheser! I have noted that as IT0192A.
+
+Now, regarding the apartment type, we have a variety of options available. Would you prefer a Studio, One-Bedroom, or Two-Bedroom apartment? Please let me know, and I'll be happy to assist you in finding the perfect fit for your stay.
+user: I'm not sure. Can I see your options?
+tool: The following are our available apartments:
+Apartment[55980] -- Verona Centre Apartments
+Max guests: 5
+Preview: - check image for preview - 
+Apartment[91682] -- Al 18 Verona Rooms
+Max guests: 2
+Preview: - check image for preview - 
+Apartment[9946] -- Arena Dreams Apartments
+Max guests: 4
+Preview: - check image for preview - 
+Apartment[50636] -- Vitti’s Home Verona 3
+Max guests: 2
+Preview: - check image for preview - 
+
+assistant: Certainly! Here are the available apartments along with their details and images. Please let me know if you need more information.
+user: I'd like to stay at apartment 50636
+assistant: Please confirm the booking details.
+
+Booking details:
+
+Apartment number: 50636
+Full Name: Amir Gheser Gheser
+Document type: passport
+Document number: IT0192A
+Number of guests: 1
+From: 10/02/25
+To: 15/02/25
+
+user: User denied booking
+assistant: I apologize for the mistake. It seems that there's an issue with your booking request. Could you please provide more information about why the booking was denied? Was it due to incorrect dates, apartment availability, or something else?
+user: My name and surname are Amir Gheser and I will be travelling with my girlfriend
+assistant: Please confirm the booking details.
+
+Booking details:
+
+Apartment number: 50636
+Full Name: Amir Gheser
+Document type: passport
+Document number: IT0192A
+Number of guests: 2
+From: 10/02/25
+To: 15/02/25
+
+user: User confirmed booking
+tool: Booking confirmed

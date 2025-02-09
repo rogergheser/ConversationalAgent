@@ -1,0 +1,35 @@
+welcome_msg, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+error_handling, 
+error_handling, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA
+--------------------------------------------------
+assistant: I am your apartment assistant, how can I help you?
+user: I would like to book an apartment
+assistant: To assist you with booking a suitable apartment, could you please provide me with your name and surname? This will help me personalize the process for you.
+user: My name is Amir and surname is Gheser
+assistant: Thank you, Amir! I've got your information.
+
+To book an apartment, I need to know when you'd like to check-in and check-out. Could you please provide me with the start date and end date of your stay?
+user: I would like to stay from the 2nd to the 5th of May 2025
+assistant: Amir! I've got your dates: May 2nd to May 5th, 2025.
+
+Next, could you please tell me how many guests will be staying in the apartment? Also, do you have a preferred apartment number or would you like me to suggest some options?
+user: I will be alone. The apartment number is 50636
+tool: User MUST provide all the necessary information to book an apartment
+tool: There must have been an error in the pipeline.The assistant must ask the user to provide a missing field as the booking request is not fully filled.
+assistant: Could you please provide your identification document type and number, Amir? This will help me find the best apartment for you.
+
+Please note that I'm looking for the document type and its corresponding number.
+user: Sure, my ID is AY19875
+assistant: Thank you, Amir! I've got your identification document number: AY19875.
+
+Now, to confirm the booking, may I please have your credit card information? This will ensure that the reservation is secure and guaranteed.

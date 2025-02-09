@@ -48,7 +48,7 @@ class DM:
         """
         return self.query_dialogue_manager(state_tracker)
     
-    def query_dialogue_manager(self, state_tracker: DialogueST):
+    def query_dialogue_manager(self, state_tracker: DialogueST, iteration: int=0):
         """
         Query the dialogue manager model to get the next best action to perform.
         """
@@ -62,8 +62,10 @@ class DM:
         except:
             self.logger.debug('\033[91m' + 'Error in parsing the action. Please try again.\n\n' 
                               + '\033[0m'+ raw_action)
-            return
+            self.logger.info("[IT|{}]Calling dialogue_manager_again.".format(iteration))
+            return self.query_dialogue_manager(state_tracker, iteration=iteration+1)
         self.logger.info(str(action) + ' [' + ', '.join(arguments) + ']')
+        
         return action, arguments
 
     # TODO: Rewrite this function, it's a terrible design
@@ -79,6 +81,8 @@ class DM:
                 return f'ask_info({(", ").join(args)})'
             case 'request_info':
                 return f'ask_info({(", ").join(args)})'
+            case 'ask_clarification':
+                return f'ask_clarification({args})'
             case 'confirm_order':
                 fun = self.special_actions['confirm_order']
                 return handle_call(fun, args, kwargs)
@@ -110,10 +114,10 @@ class DM:
             messages = [{
                             'role':'system',
                             'content': system_prompt
-                            }] + self.history.to_msg_history(hist_len=5)
+                            }] + self.history.to_msg_history(hist_len=3)
             if input_text:
                 messages.append({
-                    'role': 'tool',
+                    'role': 'user',
                     'content': input_text
                 })
             self.logger.debug(messages, extra={"color": "blue"})

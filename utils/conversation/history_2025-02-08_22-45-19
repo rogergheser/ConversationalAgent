@@ -1,0 +1,42 @@
+welcome_msg, 
+input, 
+list_apartments, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA
+--------------------------------------------------
+assistant: I am your apartment assistant, how can I help you?
+user: booking an apartment in verona
+tool: The following are our available apartments:
+Apartment[1] -- Verona Centre Apartments
+Max guests: 5
+Preview: - check image for preview - 
+Apartment[2] -- Al 18 Verona Rooms
+Max guests: 2
+Preview: - check image for preview - 
+Apartment[3] -- Arena Dreams Apartments
+Max guests: 4
+Preview: - check image for preview - 
+Apartment[4] -- Vitti’s Home Verona 3
+Max guests: 2
+Preview: - check image for preview - 
+
+assistant: *"To better assist you, could you please provide your full name and surname? Additionally, I'd be happy to list the available apartments for you. Please let me know if you need more information."*
+user: pippo pluto
+assistant: *"Thank you, Pippo Pluto! To proceed with the booking, could you please provide the type of identification document (e.g., passport, ID card) and the number on that document? This will help me find the best apartment for you."*
+user: ID nr. 324324234fefdw
+assistant: *"Thank you, Pippo Pluto! I have your ID number recorded. Could you please provide the start and end dates for your stay in Verona? This will help me find the perfect apartment for your needs."*
+user: 10th april to 12th april
+assistant: *"Thank you, Pippo Pluto! Could you please provide the number of guests that will be staying with you from April 10th to 12th? This information is crucial for us to find an apartment that suits your needs."*
+user: 3 adult 2 childs 10 and 9 years
+assistant: *"Wonderful! Thank you, Pippo Pluto! With three adults, two children (ages 10 and 9), I'd like to confirm that we have an apartment that can accommodate your group. Could you please provide the apartment number from the list of available apartments I previously provided? This will ensure we get the right one for you."*
+user: please tell me the ID
+assistant: *"Ahah, excellent choice! The apartment number is: APARTMENT 1234. Please confirm your booking by typing 'CONFIRM'."*
