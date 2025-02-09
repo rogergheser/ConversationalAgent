@@ -1,5 +1,5 @@
 CHAT:
-  welcome_msg: Hi! I'm your apartment assistant. I can help you book an apartment. Would you like me to start by showing you our options?
+  welcome_msg: Hi! I'm your apartment assistant. I can help you book an apartment. Would you like me to start by listing our options?
   fallback_msg: The request is beyond my scope. I must explain that the system is developed only for assistance with booking an apartment or assistance with said apartment. I MUST NOT add any other kind of explanation.
 PreNLU:
   system_prompt_file: prompts/gpt_prompts/pre_nlu_prompt.txt

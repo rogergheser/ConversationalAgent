@@ -40,6 +40,17 @@ class ApartmentManager():
             filtered_apartments = filtered_apartments[filtered_apartments[key] == value]
         
         return filtered_apartments
+    
+    def show_apartments(self, *apartment_list)->str:
+        if apartment_list == 'all':
+            apartment_list = [apart['id'] for apart in self.apartments.to_dict(orient='records')]
+        if not isinstance(apartment_list, list):
+            raise ValueError('Apartment list must be a list of integers')
+        apartments = self.apartments[self.apartments['id'].isin(apartment_list)]
+        
+        for apartment in apartments:
+            show_image(apartment['path'], apartment['id'], apartment['name'])
+        return 'show_apartments'
 
     def list_apartments(self)->str:
         filters = [('isFree', True)] # To make possible to filter the apartments searched

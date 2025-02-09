@@ -32,8 +32,7 @@ def parse_json(json_str: str, with_list:bool = False, replace_quotes = True) -> 
     Raises:
         ValueError: If the input cannot be parsed into valid JSON after cleanup.
     """
-    if json_str.startswith('***'):
-        json_str = json_str[3:]
+    json_str = json_str.strip('*')
     try:
         json_str = json_str.split('```', 1)[1].rsplit('```', 1)[0]
         if json_str.startswith('json'):

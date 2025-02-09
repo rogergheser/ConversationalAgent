@@ -1,0 +1,9 @@
+welcome_msg, 
+input, 
+contact_operator, 
+lexicalised_NBA
+--------------------------------------------------
+assistant: Hi! I'm your apartment assistant. I can help you book an apartment. Would you like me to start by showing you our options?
+user: I would like to know the prices
+tool: A human operator has been notified and will respond as soon as he's available
+assistant: "I have forwarded your request to an operator. Someone will assist you shortly. Thank you for your patience!"

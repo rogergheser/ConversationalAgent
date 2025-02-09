@@ -43,6 +43,8 @@ class NLG:
         """
         ret = {}
         for function in functions:
+            if 'send_ack' in function:
+                continue
             try:
                 action, args = function.split('(', 1)
                 args = args[:-1].split(', ')

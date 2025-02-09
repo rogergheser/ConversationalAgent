@@ -177,3 +177,45 @@ class ListApartmentsST(DialogueST):
             if self.list_apartments[field] is None:
                 return False
         return True
+
+class SeeApartmentsST(DialogueST):
+    def __init__(self):
+        self.fields = ["apartment_numbers"]
+
+        self.see_apartments = { field: None for field in self.fields }
+
+    def update(self, parsed_input):
+        if 'intent' in parsed_input:
+            if 'see' not in parsed_input['intent'] and 'apartment' not in parsed_input['intent']:
+                logging.warning('Intent is not list apartments.')
+                return
+        if 'slots' not in parsed_input:
+            logging.warning('No slots found in parsed input.')
+            return
+        
+        parsed_input = parsed_input['slots']
+
+        for field in parsed_input:
+            if parsed_input[field] == 'null':
+                continue
+            if field in self.see_apartments:
+                self.see_apartments[field] = parsed_input[field]
+            else:
+                logging.warning(f'Field {field} not found in order fields.')
+
+    def __str__(self):
+        return ', '.join([f'{key}: {value}' for key, value in self.see_apartments.items()])
+    
+    def to_dict(self):
+        return json.dumps({
+            "intent": "see_apartments",
+            "slots" : self.see_apartments
+        })
+    
+    def is_valid(self):
+        for field in self.list_apartments:
+            if self.list_apartments[field] is None:
+                return False
+        return True
+
+        

@@ -85,6 +85,17 @@ Your task is to extract the **intent** of the user message and the corresponding
 }
 ```
 
+#### **8. Handling Out-of-Scope Requests**  
+```
+{
+    "intent" : "see_apartments"
+    "slots" : {
+        "apartment_numbers" : list[int]
+    }
+}
+```
+
+
 ---
 
 ### **Example Inputs & Outputs:**  
@@ -164,6 +175,19 @@ Your task is to extract the **intent** of the user message and the corresponding
 {
     "intent": "fallback",
     "slots": {}
+}
+```
+
+#### **User Input:**
+*"Can you show apartments 2 and 4?"
+
+#### **Expected Output:**
+```
+{
+    "intent" : "see_apartments",
+    "slots" : {
+        "apartment_numbers" : [2,4]
+    }
 }
 ```
 

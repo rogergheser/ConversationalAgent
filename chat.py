@@ -40,6 +40,7 @@ class Chat():
         self.feedback_st = FeedbackST()
         self.list_apartments_st = ListApartmentsST()
         self.fallback_st = FallbackST()
+        self.see_apartments_st = SeeApartmentsST()
         self.apartment_manager = ApartmentManager(
             'data/apartments.csv',
             self.history,
@@ -53,6 +54,7 @@ class Chat():
         self.dm.update_possible_actions({
             'list_apartments': self.apartment_manager.list_apartments,
             'confirm_booking': self.apartment_manager.book_apartment,
+            'show_apartments' : self.apartment_manager.show_apartments,
             'feedback': self.apartment_manager.give_feedback,
             'contact_operator' : self.contact_human,
             'fallback' : self.handle_fallback,
@@ -100,6 +102,9 @@ class Chat():
             case 'fallback':
                 self.fallback_st.update(meaning_representation)
                 return self.dm(self.fallback_st)
+            case 'see_apartments':
+                self.see_apartments_st.update(meaning_representation)
+                return self.dm(self.see_apartments_st)
             case _:
                 self.logger.error(f'Unknown intent: {meaning_representation["intent"]}')
                 raise ValueError(f'Unknown intent: {meaning_representation["intent"]}')
@@ -107,6 +112,28 @@ class Chat():
     def contact_human(self):
         self.RUNNING = False
         return self.apartment_manager.contact_human()
+
+    def info_ack(self, meaning_representations:list[str], msg)->str:
+        """
+        Takes the last parsed information and creates a NBA confirmation message.
+        """
+        ack_slots = []
+        for meaning_representation in meaning_representations:
+            if "slots" in meaning_representation:
+                slots = meaning_representation['slots']
+            for slot in slots:
+                if slots[slot] is not None:
+                    ack_slots.append(slot)
+        
+        return json.dumps(
+            {
+                "intent" : "send_ack",
+                "slots" : {
+                    "fields" : ack_slots,
+                    "message" : msg
+                }
+            }
+        )
 
     def run_chat(self):
         print(f'\033[92m{self.welcome_msg}\033[0m')
@@ -120,6 +147,7 @@ class Chat():
             self.history.add(user_input, 'user', 'input') # NLU feeds user input to the LLM internally
 
             NBAs = []
+            NBAs.append(self.info_ack(meaning_representations, user_input))
             for meaning_representation in meaning_representations:
                 try:
                     NBAs.append(self.process_intent(meaning_representation))

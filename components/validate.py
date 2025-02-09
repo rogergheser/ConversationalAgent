@@ -11,6 +11,7 @@ class Validator():
             'book_apartment': self.book_apartment_st,
             'give_feedback': self.feedback_st,
             'list_apartments': self.list_apartments_st,
+            'see_apartments' : self.see_apartments_st,
             'contact_operator': None,
             'fallback': None
         }
