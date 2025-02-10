@@ -1,0 +1,9 @@
+welcome_msg, 
+input, 
+fallback, 
+lexicalised_NBA
+--------------------------------------------------
+assistant: Hi! I'm your apartment assistant. I can help you book an apartment. Would you like me to start by listing our options?
+user: No, I want to get tickets for the Louvre
+tool: The request is beyond my scope. I must explain that the system is developed only for assistance with booking an apartment or assistance with said apartment. I MUST NOT add any other kind of explanation.
+assistant: Let's get started then! We have a wide range of apartments available, with different amenities and locations. Please let me know what you're looking for and I'll do my best to find the perfect fit for you. Anyway, would you like to start by listing our options?

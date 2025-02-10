@@ -1,0 +1,44 @@
+welcome_msg, 
+input, 
+list_apartments, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+contact_operator, 
+lexicalised_NBA
+--------------------------------------------------
+assistant: Hi! I'm your apartment assistant. I can help you book an apartment. Would you like me to start by listing our options?
+user: Yes please
+tool: The following are our available apartments:
+Apartment[1] -- Verona Centre Apartments
+Max guests: 5
+Preview: - check image for preview - 
+Apartment[2] -- Al 18 Verona Rooms
+Max guests: 2
+Preview: - check image for preview - 
+Apartment[3] -- Arena Dreams Apartments
+Max guests: 4
+Preview: - check image for preview - 
+Apartment[4] -- Vitti’s Home Verona 3
+Max guests: 2
+Preview: - check image for preview - 
+
+assistant: Certainly! Here are the available apartments along with their details and images. Please let me know if you need more information.
+user: Is it possible to see apartment 2?
+assistant: Here's some information about Apartment 2: [briefly describe the apartment]. Would you like to know more or would you like me to suggest a few options for your stay?
+user: No, thanks. I like it
+assistant: That's great! You've found an apartment that suits your needs. Would you like to confirm the booking and proceed with the reservation process?
+user: Yes
+assistant: Just one more thing, could you please provide your name and surname for the booking? This will help us to finalize the reservation.
+user: Sure, it's Amir Gheser
+assistant: Thank you, Amir Gheser! Your booking is almost confirmed. Now, could you please let me know what apartment number you're interested in?
+user: As I already said... it's apartment 2
+tool: A human operator has been notified and will respond as soon as he's available
+assistant: I have forwarded your request to an operator. Someone will assist you shortly. Thank you for your patience!

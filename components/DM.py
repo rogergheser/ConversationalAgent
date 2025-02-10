@@ -26,8 +26,10 @@ class DM:
 
     @classmethod
     def from_cfg(cls, cfg, history):
-        # get logger name from cfg
-        raise NotImplementedError
+        return cls(
+            cfg['DM'],
+            history
+        )
     
     def update_possible_actions(self, new_special_actions: dict):
         self.special_actions.update(new_special_actions)
@@ -52,6 +54,8 @@ class DM:
         """
         Query the dialogue manager model to get the next best action to perform.
         """
+        if iteration > 5:
+            raise "Too many iterations in querying the dialogue manager."
         meaning_representation = '```\n' + state_tracker.to_dict() + '\n```'
         raw_action = self.query_model(self.dm_cfg['model_name'], self.dm_cfg['system_prompt_file'], str(meaning_representation))
         # action = parse_json(raw_action) # TODO what to parse? Do we need to parse?
@@ -68,7 +72,7 @@ class DM:
             self.logger.info(str(action) + ' [' + ', '.join(arguments) + ']')
         except:
             pass
-        
+
         return action, arguments
 
     # TODO: Rewrite this function, it's a terrible design

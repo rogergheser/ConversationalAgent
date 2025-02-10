@@ -1,0 +1,65 @@
+welcome_msg, 
+input, 
+list_apartments, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+list_apartments, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA
+--------------------------------------------------
+assistant: Hi! I'm your apartment assistant. I can help you book an apartment. Would you like me to start by listing our options?
+user: Yeah
+tool: The following are our available apartments:
+Apartment[1] -- Verona Centre Apartments
+Max guests: 5
+Preview: - check image for preview - 
+Apartment[2] -- Al 18 Verona Rooms
+Max guests: 2
+Preview: - check image for preview - 
+Apartment[3] -- Arena Dreams Apartments
+Max guests: 4
+Preview: - check image for preview - 
+Apartment[4] -- Vitti’s Home Verona 3
+Max guests: 2
+Preview: - check image for preview - 
+
+assistant: Certainly! Here are the available apartments along with their details and images. Please let me know if you need more information.
+user: Ok
+assistant: Here are the available apartments: 
+
+Apartment 1 - Studio Apartment, 1 Bedroom, 2 Bedrooms, ...
+
+Please let me know which one you're interested in or if you'd like to see more details about each apartment.
+user: That's fine
+assistant: I've listed the available apartments for you.
+user: ok
+tool: The following are our available apartments:
+Apartment[1] -- Verona Centre Apartments
+Max guests: 5
+Preview: - check image for preview - 
+Apartment[2] -- Al 18 Verona Rooms
+Max guests: 2
+Preview: - check image for preview - 
+Apartment[3] -- Arena Dreams Apartments
+Max guests: 4
+Preview: - check image for preview - 
+Apartment[4] -- Vitti’s Home Verona 3
+Max guests: 2
+Preview: - check image for preview - 
+
+assistant: Certainly! Here are the available apartments along with their details and images. Please let me know if you need more information.
+user: Apartment 2 is fine
+assistant: That's a great choice! Apartment 2 has been selected for you. Would you like to see the apartment details and make a booking, or would you like more information before making a decision?
+user: I've seen enough
+assistant: Could you please provide your name and surname for the booking? This will help us finalize the details.
+user: Amir Gheser
+assistant: Thank you, Amir Gheser! What type of document do you have to prove your identity: passport, driver's license, or ID card?

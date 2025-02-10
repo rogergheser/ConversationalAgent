@@ -22,6 +22,8 @@ class PreNLU():
             self.model, self.tokenizer = load_model(cfg['model_name'], parallel=False, device='cuda', dtype='b16')
 
     def __call__(self, prompt: str, iteration: int=0):
+        if iteration > 5:
+            raise "Too many iterations in querying the PreNLU."
         chunk_list = self.query_model(self.cfg['model_name'], self.cfg['system_prompt_file'], prompt)
         try:
             chunk_list = parse_json(chunk_list, with_list=True)
@@ -45,7 +47,7 @@ class PreNLU():
         """
         Post-process the chunks to fix errors and assign correct priority
         """
-        print(chunk_list)
+        # print(chunk_list)
         ret_chunk_dict = {}
         # Group chunks based on intent
 
@@ -59,7 +61,7 @@ class PreNLU():
         if len(ret_chunk_dict) < len(chunk_list):
             self.logger.error('\033[91m' + '[HANDLED ERROR]' + '\033[0;0m' + 'Detected and merged chunks.')
         
-        print(ret_chunk_dict)
+        # print(ret_chunk_dict)
         return ret_chunk_dict
 
     def query_model(self, model_name: str, system: str, input_text: Union[str, bool]=False, max_seq_len: int=128):
@@ -128,8 +130,11 @@ class NLU():
 
     @classmethod
     def from_cfg(cls, cfg, history):
-        # get logger name from cfg
-        raise NotImplementedError
+        return cls(
+            cfg['PreNLU'],
+            cfg['NLU'],
+            history
+    )
 
     def __call__(self, prompt: str):
         """
@@ -155,10 +160,26 @@ class NLU():
 
     def post_process(self, meaning_representations):
         self.logger.debug("NLU PostProcessing not implemented yet.")
-        return meaning_representations
+        merged_representations = {}
+        for rep in meaning_representations:
+            intent = rep['intent']
+            if intent in merged_representations:
+                # Merge the slots if the intent already exists
+                for slot, value in rep['slots'].items():
+                    if slot in merged_representations[intent]['slots']:
+                        if merged_representations[intent]['slots'][slot] is None:
+                            merged_representations[intent]['slots'][slot] = value
+                    else:
+                        merged_representations[intent]['slots'][slot] = value
+            else:
+                merged_representations[intent] = rep
+        
+        return list(merged_representations.values())
 
     @log_call(logging.getLogger('NLU'))
     def get_meaning_representation(self, input_prompt: str, iteration: int=0):
+        if iteration > 5:
+            raise "Too many iterations in querying the NLU."
         raw_meaning_rep = self.query_model(self.nlu_cfg['model_name'], self.nlu_cfg['system_prompt_file'], input_prompt, iteration=iteration)
         try:
             meaning_representation = parse_json(raw_meaning_rep)

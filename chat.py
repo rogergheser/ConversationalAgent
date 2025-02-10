@@ -167,6 +167,10 @@ class Chat():
 
 if __name__ == '__main__':
     conf = omegaconf.OmegaConf.load('config.yaml')
+    logging.disable(logging.CRITICAL)
+    file_handler = logging.FileHandler('chat.log')
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    file_handler.setFormatter(formatter)
+    logging.getLogger().addHandler(file_handler)
     
     chat = Chat.from_config(conf)    
-    

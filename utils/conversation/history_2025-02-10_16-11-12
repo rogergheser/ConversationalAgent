@@ -1,0 +1,26 @@
+welcome_msg, 
+input, 
+list_apartments, 
+lexicalised_NBA, 
+input, 
+lexicalised_NBA
+--------------------------------------------------
+assistant: Hi! I'm your apartment assistant. I can help you book an apartment. Would you like me to start by listing our options?
+user: Yes please
+tool: The following are our available apartments:
+Apartment[1] -- Verona Centre Apartments
+Max guests: 5
+Preview: - check image for preview - 
+Apartment[2] -- Al 18 Verona Rooms
+Max guests: 2
+Preview: - check image for preview - 
+Apartment[3] -- Arena Dreams Apartments
+Max guests: 4
+Preview: - check image for preview - 
+Apartment[4] -- Vitti’s Home Verona 3
+Max guests: 2
+Preview: - check image for preview - 
+
+assistant: Certainly! Here are the available apartments along with their details and images. Please let me know if you need more information.
+user: Can I see apartment 2
+assistant: Apartment 2 is a cozy studio with a comfortable bed, a fully equipped kitchenette, and a modern bathroom. It's located on the second floor and has a beautiful view of the surrounding area. Would you like to see some images of the apartment?
