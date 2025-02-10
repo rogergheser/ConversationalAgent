@@ -1,6 +1,6 @@
 import logging
 import pandas as pd
-
+import matplotlib.pyplot as plt
 from .service import Service
 from .apartmentTracker import  BookApartmentST, FeedbackST, ListApartmentsST
 from .stateTracker import FallbackST
@@ -44,12 +44,15 @@ class ApartmentManager():
     def show_apartments(self, *apartment_list)->str:
         if apartment_list == 'all':
             apartment_list = [apart['id'] for apart in self.apartments.to_dict(orient='records')]
-        if not isinstance(apartment_list, list):
-            raise ValueError('Apartment list must be a list of integers')
+        if not isinstance(apartment_list, int):
+            try:
+                apartment_list = [int(val) for val in apartment_list]
+            except:
+                raise ValueError('Apartment list must be a list of integers')
         apartments = self.apartments[self.apartments['id'].isin(apartment_list)]
         
-        for apartment in apartments:
-            show_image(apartment['path'], apartment['id'], apartment['name'])
+        for _, apt in apartments.iterrows():
+            show_image(apt['path'], apt['id'], apt['name'])
         return 'show_apartments'
 
     def list_apartments(self)->str:

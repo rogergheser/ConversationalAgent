@@ -1,0 +1,7 @@
+welcome_msg, 
+input, 
+lexicalised_NBA
+--------------------------------------------------
+assistant: Hi! I'm your apartment assistant. I can help you book an apartment. Would you like me to start by listing our options?
+user: I want to see apartment 3
+assistant: Apartment 3 is a lovely option! Let me tell you more about it. Apartment 3 has [insert details about the apartment here]. Would you like to know more or book it straight away?

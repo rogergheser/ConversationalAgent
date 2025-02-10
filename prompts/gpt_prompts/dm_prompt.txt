@@ -14,6 +14,8 @@ Your task is to determine the **next best action** based on:
 5. **No If-Statements** → Select the next best action directly.
 6. Do not confuse list apartments (text) and show apartments (image).
 7. ONLY provide list of integers to show_apartments.
+8. If the user has not provided any information to determine the next best action prompt him towards booking an apartment!
+9. If the user asks apartment-specific information divert communication to an operator.
 
 ### **Useful Information**
 1. When asking apartment_number the user might want to see the apartments first.

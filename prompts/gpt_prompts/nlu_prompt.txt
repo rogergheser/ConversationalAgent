@@ -8,7 +8,7 @@ Your task is to extract the **intent** of the user message and the corresponding
 2. **Short and Concise** → No explanations, no extra text, no unnecessary formatting.  
 3. **No Guessing** → If a value is missing, set it to `null`. Do not invent values. Also, if a value is vague or badly specified, ignore it, it will be asked by the system again.
 4. **Scope Enforcement** →  
-   - If the request is **apartment-related but beyond scope**, flag it as `"contact_operator"`.  
+   - If the request is **apartment-related but beyond scope**, flag it as `"contact_operator"`.
    - If the request is **unrelated to apartments**, flag it as `"fallback"`.  
 5. **Date Format** → Represent dates as strings in `"DD/MM/YY"` format.  
 6. **Custom Messages** → If no specific message is required, return an empty `"custom_message"` field.  

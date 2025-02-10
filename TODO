@@ -1,3 +1,5 @@
+- Add more apartment specific information
+- Add context information in DM to address request of specific information about the apartments
 - Add NLU input validation (e.g. on fields) -- vague information
 - Postprocess NLU output
 - Postprocess DM output

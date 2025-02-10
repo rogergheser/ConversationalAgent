@@ -64,7 +64,10 @@ class DM:
                               + '\033[0m'+ raw_action)
             self.logger.info("[IT|{}]Calling dialogue_manager_again.".format(iteration))
             return self.query_dialogue_manager(state_tracker, iteration=iteration+1)
-        self.logger.info(str(action) + ' [' + ', '.join(arguments) + ']')
+        try:
+            self.logger.info(str(action) + ' [' + ', '.join(arguments) + ']')
+        except:
+            pass
         
         return action, arguments
 

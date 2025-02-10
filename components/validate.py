@@ -1,11 +1,12 @@
 import logging
-from .apartmentTracker import BookApartmentST, FeedbackST, ListApartmentsST
+from .apartmentTracker import BookApartmentST, FeedbackST, ListApartmentsST, SeeApartmentsST
 
 class Validator():
     def __init__(self):
         self.book_apartment_st = BookApartmentST()
         self.feedback_st = FeedbackST()
         self.list_apartments_st = ListApartmentsST()
+        self.see_apartments_st = SeeApartmentsST()
 
         self.str2cls = {
             'book_apartment': self.book_apartment_st,
