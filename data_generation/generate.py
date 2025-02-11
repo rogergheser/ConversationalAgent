@@ -199,7 +199,7 @@ def integrate_complete_booking(dm_data: list[dict]):
 def get_nlu_data():
     nlu_templates = {
         'book_apartment': book_apartment_templates,
-        'list_apartment': list_apartment_templates,
+        'list_apartments': list_apartment_templates,
         'contact_operator': contact_operator_templates,
         'fallback': fallback_templates,
         'see_apartments': see_apartment_templates
@@ -229,7 +229,7 @@ def get_dm_data():
 if __name__ == '__main__':
     nlu_templates = {
         'book_apartment': book_apartment_templates,
-        'list_apartment': list_apartment_templates,
+        'list_apartments': list_apartment_templates,
         'contact_operator': contact_operator_templates,
         'fallback': fallback_templates,
         'see_apartments': see_apartment_templates

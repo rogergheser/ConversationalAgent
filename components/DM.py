@@ -1,7 +1,6 @@
 import logging
 import ollama
 import os
-
 from .stateTracker import DialogueST
 from utils import (
     ConversationHistory,
@@ -10,7 +9,7 @@ from utils import (
     load_model,
     handle_call
 )
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 class DM:
     def __init__(self,
@@ -50,13 +49,17 @@ class DM:
         """
         return self.query_dialogue_manager(state_tracker)
     
-    def query_dialogue_manager(self, state_tracker: DialogueST, iteration: int=0):
+    def query_dialogue_manager(self, state_tracker: Union[DialogueST, str], iteration: int=0):
         """
         Query the dialogue manager model to get the next best action to perform.
         """
         if iteration > 5:
             raise "Too many iterations in querying the dialogue manager."
-        meaning_representation = '```\n' + state_tracker.to_dict() + '\n```'
+        if isinstance(state_tracker, str):
+            meaning_representation = '```\n' + state_tracker  + '\n```'
+        elif isinstance(state_tracker, DialogueST):
+            meaning_representation = '```\n' + state_tracker.to_dict() + '\n```'
+
         raw_action = self.query_model(self.dm_cfg['model_name'], self.dm_cfg['system_prompt_file'], str(meaning_representation))
         # action = parse_json(raw_action) # TODO what to parse? Do we need to parse?
         # Define a format for asking info
