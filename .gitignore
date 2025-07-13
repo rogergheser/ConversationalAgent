@@ -1,5 +1,8 @@
 token.json
+**/.DS_Store
 credentials.json
+.vscode
+data/apartments/**
 *.mp4
 # Byte-compiled / optimized / DLL files
 __pycache__/
