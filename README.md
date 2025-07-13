@@ -108,7 +108,7 @@ ConversationalAgent/
 
 ## ▶️ Run the Agent
 
+Create your env by following the requirements and then run
 ```bash
-git clone https://github.com/rogergheser/ConversationalAgent.git
-cd ConversationalAgent
-python run_agent.py
+python chat.py
+```
